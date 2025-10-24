@@ -25,9 +25,6 @@ math-cjk: "Noto Sans SC", // 数学公式里的中文字体
 /// - media: 媒体类型
 /// * "print" = 打印版（A4纸，标准边距）
 /// * "screen" = 屏幕版（小边距，适合电子阅读）
-/// - theme: 主题配色
-/// * "light" = 亮色主题（白底黑字）
-/// * "dark" = 暗色主题（黑底白字，护眼）
 /// - size: 打印版字号，默认 11pt
 /// - screen-size: 屏幕版字号，默认 11pt
 /// - title: 文档标题，比如"期末复习笔记"
@@ -45,9 +42,6 @@ math-cjk: "Noto Sans SC", // 数学公式里的中文字体
 /// - body: 文档正文内容
 #let ori(
 media: "print",
-theme: "light
-
-",
 size: 11pt,
 screen-size: 11pt,
 title: none,
@@ -76,11 +70,11 @@ let page-margin = if media == "screen" { (x: 35pt, y: 35pt) } else { auto }
 let text-size = if media == "screen" { screen-size } else { size }
 
 // --------------------------------------------
-// 根据主题设置配色方案
+// 亮色主题配色方案
 // --------------------------------------------
-let bg-color = if theme == "dark" { rgb("#1f1f1f") } else { rgb("#ffffff") } // 背景色
-let text-color = if theme == "dark" { rgb("#ffffff") } else { rgb("#000000") } // 文字颜色
-let raw-color = if theme == "dark" { rgb("#27292c") } else { rgb("#f0f0f0") } // 代码块背景色
+let bg-color = rgb("#ffffff") // 背景色
+let text-color = rgb("#000000") // 文字颜色
+let raw-color = rgb("#f0f0f0") // 代码块背景色
 
 // --------------------------------------------
 // 合并用户自定义字体和默认字体
@@ -238,7 +232,40 @@ pagebreak(weak: true) // 换页（如果后面没内容就不换）
 // ============================================
 if makeoutline {
 show heading: align.with(center) // 目录页的标题居中
-show outline.entry: set block(spacing: 1.2em) // 目录项之间的间距
+
+// 自定义目录项样式，让引导点垂直居中
+show outline.entry: it => {
+  let loc = it.element.location()
+  let page-num = counter(page).at(loc).first()
+  
+  // 获取标题的编号
+  let heading-numbering = it.element.numbering
+  let heading-number = if heading-numbering != none {
+    numbering(heading-numbering, ..counter(heading).at(loc))
+  }
+  
+  // 使用 grid 布局来实现垂直居中的点
+  block(
+    spacing: 1.2em,
+    grid(
+      columns: (auto, 1fr, auto),
+      column-gutter: 0.5em,
+      align: (left, horizon, right), // horizon 让中间列垂直居中
+      {
+        h(it.level * 2em) // 根据层级缩进
+        link(loc)[
+          #if heading-number != none {
+            heading-number
+            h(0.5em)
+          }
+          #it.element.body // 标题文本
+        ]
+      },
+      align(horizon, repeat[.~]), // 引导点，垂直居中
+      link(loc, str(page-num)) // 页码
+    )
+  )
+}
 
 outline(depth: outline-depth, indent: 2em) // 生成目录，缩进2em
 pagebreak(weak: true)                      // 目录后换页
