@@ -234,15 +234,55 @@ pagebreak(weak: true) // 换页（如果后面没内容就不换）
 }
 
 // ============================================
-// 生成目录（可选）
-// ============================================
-if makeoutline {
-show heading: align.with(center) // 目录页的标题居中
-show outline.entry: set block(spacing: 1.2em) // 目录项之间的间距
+  // 生成目录
+  // ============================================
+  if makeoutline {
+    // 为目录页设置专门的页边距（比正文页边距更大，让目录更美观）
+    set page(margin: if media == "screen" { (x: 50pt, y: 50pt) } else { (x: 60pt, y: 60pt) })
 
-outline(depth: outline-depth, indent: 2em) // 生成目录，缩进2em
-pagebreak(weak: true)                      // 目录后换页
-}
+    show heading: align.with(center) // 目录页的标题居中
+    show outline.entry: it => {
+      // 获取当前目录项所在的位置信息
+      let loc = it.element.location()
+      // 获取该位置对应的页码（使用页面计数器）
+      let page-num = counter(page).at(loc).first()
+
+      // 获取标题的编号格式（如 "1.", "1.1." 等）
+      let heading-numbering = it.element.numbering
+      // 根据编号格式生成实际的标题编号
+      let heading-number = if heading-numbering != none {
+        numbering(heading-numbering, ..counter(heading).at(loc))
+      }
+
+      // 使用 grid 布局来实现三列式的目录条目
+      block(
+        spacing: 1.2em, // 目录项之间的垂直间距
+        grid(
+          columns: (auto, 1fr, auto), // 三列布局：左列自适应宽度，中列占满剩余空间，右列自适应宽度
+          column-gutter: 1.5em, // 列之间的间距
+          align: (left, horizon, right), // 对齐方式：左列左对齐，中列垂直居中，右列右对齐
+          {
+            // 第一列：标题文本（带缩进和链接）
+            h(it.level * 2em) // 根据标题层级进行缩进（一级标题缩进0，二级缩进2em，三级缩进4em...）
+            link(loc)[ // 创建可点击的链接，点击可跳转到对应标题
+              #if heading-number != none {
+                heading-number // 显示标题编号（如 "1.1"）
+                h(0.5em) // 编号和标题之间留0.5em间距
+              }
+              #it.element.body // 显示标题的文本内容
+            ]
+          },
+          // 第二列：引导点（垂直居中的点线）
+          align(horizon, repeat[$dot$~]), // horizon让点线垂直居中，repeat[$dot$~]生成连续的点线
+          // 第三列：页码（右对齐的链接）
+          link(loc, str(page-num)) // 创建可点击的页码链接，点击可跳转到对应页面
+        )
+      )
+    }
+    outline(depth: outline-depth, indent: 2em) // 生成目录，设置目录深度和默认缩进
+
+    pagebreak(weak: true)                      // 目录后换页（弱换页，如果后面没内容就不强制换页）
+  }
 
 // ============================================
 // 重置页码
@@ -272,6 +312,9 @@ line(length: 100%, stroke: .5pt + text-color), // 细线（0.5pt）
 )
 // 每页重置脚注计数器（脚注编号每页从1开始）
 counter(footnote).update(0)
+},
+footer: { // 页脚设置（用于调整页码位置）
+v(1.5em) // 在页码上方添加1.5em的间距，将页码向下移动
 },
 fill: bg-color, // 页面背景色
 numbering: "1", // 页码样式：阿拉伯数字
