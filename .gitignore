@@ -1,0 +1,13 @@
+# Typst output files
+*.pdf
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
