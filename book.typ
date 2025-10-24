@@ -237,6 +237,9 @@ pagebreak(weak: true) // 换页（如果后面没内容就不换）
   // 生成目录
   // ============================================
   if makeoutline {
+    // 为目录页设置专门的页边距（比正文页边距更大，让目录更美观）
+    set page(margin: if media == "screen" { (x: 50pt, y: 50pt) } else { (x: 60pt, y: 60pt) })
+
     show heading: align.with(center) // 目录页的标题居中
     show outline.entry: it => {
       // 获取当前目录项所在的位置信息
