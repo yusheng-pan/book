@@ -247,7 +247,7 @@ show outline.entry: it => {
       align: (left, horizon, right), // horizon 让中间列垂直居中
       {
         h(it.level * 2em) // 根据层级缩进
-        link(loc, it.body) // 标题文本
+        link(loc, it.element.body) // 标题文本
       },
       align(horizon, repeat[.~]), // 引导点，垂直居中
       link(loc, str(page-num)) // 页码
