@@ -254,28 +254,34 @@ counter(page).update(1) // 正文从第1页开始计数
 // 页面设置（页眉、页码、边距等）
 // ============================================
 set page(
-paper: "a4", // A4纸张
-header: { // 页眉设置
-set text(0.9em) // 页眉字号小一点
-stack( // 垂直堆叠元素
-spacing: 0.2em,
-grid( // 三栏布局
-columns: (1fr, auto, 1fr), // 左右两栏自适应，中间固定
-align(left, semester), // 左边显示学期
-align(center, subject), // 中间显示科目
-align(right, title), // 右边显示标题
-),
-v(0.3em), // 空0.3em
-line(length: 100%, stroke: 1pt + text-color), // 粗线（1pt）
-v(.15em), // 空0.15em
-line(length: 100%, stroke: .5pt + text-color), // 细线（0.5pt）
-)
-// 每页重置脚注计数器（脚注编号每页从1开始）
-counter(footnote).update(0)
-},
-fill: bg-color, // 页面背景色
-numbering: "1", // 页码样式：阿拉伯数字
-margin: page-margin, // 页边距
+  paper: "a4", // A4纸张
+  header: { // 页眉设置
+    set text(0.9em) // 页眉字号小一点
+    stack( // 垂直堆叠元素
+      spacing: 0.2em,
+      grid( // 三栏布局
+        columns: (1fr, auto, 1fr), // 左右两栏自适应，中间固定
+        align(left, semester), // 左边显示学期
+        align(center, subject), // 中间显示科目
+        align(right, title), // 右边显示标题
+      ),
+      v(0.3em), // 空0.3em
+      line(length: 100%, stroke: 1pt + text-color), // 粗线（1pt）
+      v(.15em), // 空0.15em
+      line(length: 100%, stroke: .5pt + text-color), // 细线（0.5pt）
+    )
+    // 每页重置脚注计数器（脚注编号每页从1开始）
+    counter(footnote).update(0)
+  },
+  footer: { // 页脚设置（页码）
+    set text(0.9em)
+    align(center + bottom)[
+      counter(page).display("1")
+    ]
+  },
+  fill: bg-color, // 页面背景色
+  numbering: none, // 使用自定义页码渲染
+  margin: page-margin, // 页边距
 )
 
 // ============================================
