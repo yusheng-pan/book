@@ -25,9 +25,6 @@ math-cjk: "Noto Sans SC", // 数学公式里的中文字体
 /// - media: 媒体类型
 /// * "print" = 打印版（A4纸，标准边距）
 /// * "screen" = 屏幕版（小边距，适合电子阅读）
-/// - theme: 主题配色
-/// * "light" = 亮色主题（白底黑字）
-/// * "dark" = 暗色主题（黑底白字，护眼）
 /// - size: 打印版字号，默认 11pt
 /// - screen-size: 屏幕版字号，默认 11pt
 /// - title: 文档标题，比如"期末复习笔记"
@@ -45,9 +42,6 @@ math-cjk: "Noto Sans SC", // 数学公式里的中文字体
 /// - body: 文档正文内容
 #let ori(
 media: "print",
-theme: "light
-
-",
 size: 11pt,
 screen-size: 11pt,
 title: none,
@@ -76,11 +70,11 @@ let page-margin = if media == "screen" { (x: 35pt, y: 35pt) } else { auto }
 let text-size = if media == "screen" { screen-size } else { size }
 
 // --------------------------------------------
-// 根据主题设置配色方案
+// 亮色主题配色方案
 // --------------------------------------------
-let bg-color = if theme == "dark" { rgb("#1f1f1f") } else { rgb("#ffffff") } // 背景色
-let text-color = if theme == "dark" { rgb("#ffffff") } else { rgb("#000000") } // 文字颜色
-let raw-color = if theme == "dark" { rgb("#27292c") } else { rgb("#f0f0f0") } // 代码块背景色
+let bg-color = rgb("#ffffff") // 背景色
+let text-color = rgb("#000000") // 文字颜色
+let raw-color = rgb("#f0f0f0") // 代码块背景色
 
 // --------------------------------------------
 // 合并用户自定义字体和默认字体
