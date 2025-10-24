@@ -232,7 +232,28 @@ pagebreak(weak: true) // 换页（如果后面没内容就不换）
 // ============================================
 if makeoutline {
 show heading: align.with(center) // 目录页的标题居中
-show outline.entry: set block(spacing: 1.2em) // 目录项之间的间距
+
+// 自定义目录项样式，让引导点垂直居中
+show outline.entry: it => {
+  let loc = it.element.location()
+  let page-num = counter(page).at(loc).first()
+  
+  // 使用 grid 布局来实现垂直居中的点
+  block(
+    spacing: 1.2em,
+    grid(
+      columns: (auto, 1fr, auto),
+      column-gutter: 0.5em,
+      align: (left, horizon, right), // horizon 让中间列垂直居中
+      {
+        h(it.level * 2em) // 根据层级缩进
+        link(loc, it.body) // 标题文本
+      },
+      align(horizon, repeat[.~]), // 引导点，垂直居中
+      link(loc, str(page-num)) // 页码
+    )
+  )
+}
 
 outline(depth: outline-depth, indent: 2em) // 生成目录，缩进2em
 pagebreak(weak: true)                      // 目录后换页
