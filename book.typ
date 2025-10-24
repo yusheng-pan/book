@@ -313,6 +313,9 @@ line(length: 100%, stroke: .5pt + text-color), // 细线（0.5pt）
 // 每页重置脚注计数器（脚注编号每页从1开始）
 counter(footnote).update(0)
 },
+footer: { // 页脚设置（用于调整页码位置）
+v(1.5em) // 在页码上方添加1.5em的间距，将页码向下移动
+},
 fill: bg-color, // 页面背景色
 numbering: "1", // 页码样式：阿拉伯数字
 margin: page-margin, // 页边距
