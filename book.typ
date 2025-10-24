@@ -241,8 +241,9 @@ pagebreak(weak: true) // 换页（如果后面没内容就不换）
 if makeoutline {
 show heading: align.with(center) // 目录页的标题居中
 show outline.entry: set block(spacing: 1.2em) // 目录项之间的间距
+set outline.entry(fill: outline-fill) // 自定义填充符号
 
-outline(depth: outline-depth, indent: 2em, fill: outline-fill) // 生成目录，缩进2em
+outline(depth: outline-depth, indent: 2em) // 生成目录，缩进2em
 pagebreak(weak: true)                      // 目录后换页
 }
 
