@@ -238,6 +238,12 @@ show outline.entry: it => {
   let loc = it.element.location()
   let page-num = counter(page).at(loc).first()
   
+  // 获取标题的编号
+  let heading-numbering = it.element.numbering
+  let heading-number = if heading-numbering != none {
+    numbering(heading-numbering, ..counter(heading).at(loc))
+  }
+  
   // 使用 grid 布局来实现垂直居中的点
   block(
     spacing: 1.2em,
@@ -247,7 +253,13 @@ show outline.entry: it => {
       align: (left, horizon, right), // horizon 让中间列垂直居中
       {
         h(it.level * 2em) // 根据层级缩进
-        link(loc, it.element.body) // 标题文本
+        link(loc)[
+          #if heading-number != none {
+            heading-number
+            h(0.5em)
+          }
+          #it.element.body // 标题文本
+        ]
       },
       align(horizon, repeat[.~]), // 引导点，垂直居中
       link(loc, str(page-num)) // 页码
