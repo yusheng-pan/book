@@ -42,6 +42,7 @@ math-cjk: "Noto Sans SC", // 数学公式里的中文字体
 /// - maketitle: 是否生成标题页（true/false）
 /// - makeoutline: 是否生成目录（true/false）
 /// - outline-depth: 目录深度（2 = 显示到二级标题）
+/// - outline-fill: 目录标题与页码之间的填充内容（默认 repeat[.]）
 /// - body: 文档正文内容
 #let ori(
 media: "print",
@@ -62,6 +63,7 @@ first-line-indent: (amount: 0pt, all: false),
 maketitle: false,
 makeoutline: false,
 outline-depth: 2,
+outline-fill: repeat[.],
 body,
 ) = {
 // --------------------------------------------
@@ -239,6 +241,7 @@ pagebreak(weak: true) // 换页（如果后面没内容就不换）
 if makeoutline {
 show heading: align.with(center) // 目录页的标题居中
 show outline.entry: set block(spacing: 1.2em) // 目录项之间的间距
+set outline.entry(fill: outline-fill) // 自定义填充符号
 
 outline(depth: outline-depth, indent: 2em) // 生成目录，缩进2em
 pagebreak(weak: true)                      // 目录后换页
