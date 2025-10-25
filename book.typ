@@ -1,4 +1,12 @@
 // ============================================
+// 填空框辅助函数
+// ============================================
+
+#let b = box.with(width: 3em, stroke: (bottom: .75pt), baseline: 0.25em)
+#let bb = box.with(width: 6em, stroke: (bottom: .75pt), baseline: 0.25em)
+#let bbb = box.with(width: 12em, stroke: (bottom: .75pt), baseline: 0.25em)
+
+// ============================================
 // 导入各种第三方包，就像 Python 里的 import 一样
 // ============================================
 
